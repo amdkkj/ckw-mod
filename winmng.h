@@ -13,7 +13,7 @@ private:
 	void select_window(int _winid);
 
 	/* shared memory */
-	static constexpr int MAXWIN = 256;
+	enum { MAXWIN = 256 };
 	struct winList {
 		HWND list[MAXWIN];
 		int count;
