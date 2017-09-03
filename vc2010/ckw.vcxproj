@@ -194,6 +194,7 @@
     <ClCompile Include="..\misc.cpp" />
     <ClCompile Include="..\option.cpp" />
     <ClCompile Include="..\selection.cpp" />
+    <ClCompile Include="..\winmng.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\ckw.h" />
