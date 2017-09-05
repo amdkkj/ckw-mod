@@ -74,6 +74,36 @@ void copyChar(wchar_t*& p, CHAR_INFO* src, SHORT start, SHORT end, bool ret)
 }
 
 /*----------*/
+/* (amdkkj) */
+static bool containsNewLine(const wchar_t* str)
+{
+	const size_t length = std::wcslen(str);
+
+	for (size_t i = 0; i < length; ++i)
+	{
+		if (str[i] == L'\r' || str[i] == L'\n') return true;
+	}
+
+	return false;
+}
+
+/*----------*/
+/* (amdkkj) */
+static bool canPasteWithoutConfirmation(LPCTSTR lpszClipboardData)
+{
+	if (containsNewLine(lpszClipboardData)) return false;
+
+	return true;
+}
+
+/*----------*/
+/* (amdkkj) */
+static bool confirmPaste(LPCTSTR lpszClipboardData)
+{
+	return (IDOK == ::MessageBox(HWND_DESKTOP, lpszClipboardData, TEXT("Paste from clipboard"), MB_OKCANCEL));
+}
+
+/*----------*/
 void	onPasteFromClipboard(HWND hWnd)
 {
 	bool	result = true;
@@ -93,6 +123,7 @@ void	onPasteFromClipboard(HWND hWnd)
 	if(result && !(ptr = (wchar_t*)GlobalLock(hMem)))
 		result = false;
 	if(result) {
+		if (canPasteWithoutConfirmation(ptr) || confirmPaste(ptr))
 		__write_console_input(ptr, (DWORD)wcslen(ptr));
 		GlobalUnlock(hMem);
 	}
