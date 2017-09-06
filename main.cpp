@@ -976,6 +976,12 @@ static BOOL set_current_directory(const wchar_t *dir)
 	}
 	BOOL b = SetCurrentDirectory(cwd.c_str());
 
+	if (!b)
+	{
+		cwd.append(L"\\.."); // parent directory
+		b = SetCurrentDirectory(cwd.c_str());
+	}
+
 	return b;
 }
 
