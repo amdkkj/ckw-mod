@@ -41,6 +41,7 @@ HFONT	gFont;		/* font */
 DWORD	gFontW;		/* char width */
 DWORD	gFontH;		/* char height */
 int		gFontSize;
+UINT	gCodePage;
 
 DWORD	gWinW;		/* window columns */
 DWORD	gWinH;		/* window rows */
@@ -526,6 +527,19 @@ void	onTimer(HWND hWnd)
 	if(WaitForSingleObject(gChild, 0) != WAIT_TIMEOUT) {
 		PostMessage(hWnd, WM_CLOSE, 0,0);
 		return;
+	}
+
+	// check codepage
+	UINT codepage = GetConsoleCP();
+	if (gCodePage != codepage) {
+		gCodePage = codepage;
+		CONSOLE_FONT_INFOEX info = {0};
+		info.cbSize       = sizeof(info);
+		info.FontWeight   = FW_NORMAL;
+		info.dwFontSize.X = 3;
+		info.dwFontSize.Y = 6;
+		lstrcpyn(info.FaceName, L"MS GOTHIC", LF_FACESIZE);
+		SetCurrentConsoleFontEx(gStdOut, FALSE, &info);
 	}
 
 	/* refresh handle */
@@ -1183,9 +1197,14 @@ static BOOL create_console(ckOpt& opt)
 		return(FALSE);
 
 	UINT codepage = opt.getCodePage();
-	if (IsValidCodePage(codepage) && GetConsoleCP() != codepage) {
-		SetConsoleCP(codepage);
-		SetConsoleOutputCP(codepage);
+	if (IsValidCodePage(codepage)) {
+		gCodePage = codepage;
+		if (GetConsoleCP() != codepage) {
+			SetConsoleCP(codepage);
+			SetConsoleOutputCP(codepage);
+		}
+	} else {
+		gCodePage = GetConsoleCP();
 	}
 
 	// 最大化不具合の解消の為フォントを最小化
@@ -1193,6 +1212,7 @@ static BOOL create_console(ckOpt& opt)
 	CONSOLE_FONT_INFOEX info = {0};
 	info.cbSize       = sizeof(info);
 	info.FontWeight   = FW_NORMAL;
+	info.dwFontSize.X = 3;
 	info.dwFontSize.Y = 6;
 	lstrcpyn(info.FaceName, L"MS GOTHIC", LF_FACESIZE);
 	if (SetCurrentConsoleFontEx(gStdOut, FALSE, &info) == FALSE) {
