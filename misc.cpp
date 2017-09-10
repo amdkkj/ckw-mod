@@ -98,9 +98,9 @@ static bool canPasteWithoutConfirmation(LPCTSTR lpszClipboardData)
 
 /*----------*/
 /* (amdkkj) */
-static bool confirmPaste(LPCTSTR lpszClipboardData)
+static bool confirmPaste(LPCTSTR lpszClipboardData, HWND hWnd)
 {
-	return (IDOK == ::MessageBox(HWND_DESKTOP, lpszClipboardData, TEXT("Paste from clipboard"), MB_OKCANCEL));
+	return (IDOK == ::MessageBox(hWnd, lpszClipboardData, TEXT("Paste from clipboard"), MB_OKCANCEL));
 }
 
 /*----------*/
@@ -123,7 +123,7 @@ void	onPasteFromClipboard(HWND hWnd)
 	if(result && !(ptr = (wchar_t*)GlobalLock(hMem)))
 		result = false;
 	if(result) {
-		if (canPasteWithoutConfirmation(ptr) || confirmPaste(ptr))
+		if (canPasteWithoutConfirmation(ptr) || confirmPaste(ptr, hWnd))
 		__write_console_input(ptr, (DWORD)wcslen(ptr));
 		GlobalUnlock(hMem);
 	}
