@@ -43,3 +43,23 @@ BEGIN
   VALUE "Translation", 0x409, 0
  END
 END
+
+STRINGTABLE
+BEGIN
+ IDS_ABOUT,     "About (&A)"
+ IDS_COPYALL,   "Copy All(&C)"
+ IDS_NEW,       "New (&N)"
+ IDS_TOPMOST,   "To Tray(&O)"
+ IDS_TOTRAY,    "TopMost (&T)"
+END
+
+#pragma code_page(65001)
+STRINGTABLE
+LANGUAGE LANG_JAPANESE, 0x01
+BEGIN
+ IDS_ABOUT,     "バージョン情報(&A)"
+ IDS_COPYALL,   "すべてコピー(&C)"
+ IDS_NEW,       "新しいウィンドウ(&N)"
+ IDS_TOPMOST,   "タスクトレイへ最小化(&O)"
+ IDS_TOTRAY,    "最前面に表示(&T)"
+END

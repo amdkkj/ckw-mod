@@ -290,6 +290,10 @@ void	changeStateTopMostMenu(HWND hWnd, HMENU hMenu);
 
 void	sysmenu_init(HWND hWnd)
 {
+	HINSTANCE hInstance = ::GetModuleHandle(NULL);
+
+	TCHAR szBuf[256];
+
 	MENUITEMINFO mii;
 	HMENU hMenu = GetSystemMenu(hWnd, FALSE);
 
@@ -300,18 +304,21 @@ void	sysmenu_init(HWND hWnd)
 	mii.fType = MFT_STRING;
 	mii.wID = IDM_COPYALL;
 	mii.dwTypeData = L"Copy All(&C)";
+	if (::LoadString(hInstance, IDS_COPYALL, szBuf, 255) >= 1) mii.dwTypeData = szBuf;
 	mii.cch = (UINT) wcslen(mii.dwTypeData);
 	InsertMenuItem(hMenu, SC_CLOSE, FALSE, &mii);
 
 	mii.fType = MFT_STRING;
 	mii.wID = IDM_NEW;
 	mii.dwTypeData = L"New (&N)";
+	if (::LoadString(hInstance, IDS_NEW, szBuf, 255) >= 1) mii.dwTypeData = szBuf;
 	mii.cch = (UINT) wcslen(mii.dwTypeData);
 	InsertMenuItem(hMenu, SC_CLOSE, FALSE, &mii);
 
 	mii.fType = MFT_STRING;
 	mii.wID = IDM_TOTRAY;
 	mii.dwTypeData = L"To Tray(&O)";
+	if (::LoadString(hInstance, IDS_TOTRAY, szBuf, 255) >= 1) mii.dwTypeData = szBuf;
 	mii.cch = (UINT) wcslen(mii.dwTypeData);
 	InsertMenuItem(hMenu, SC_CLOSE, FALSE, &mii);
 
@@ -328,6 +335,7 @@ void	sysmenu_init(HWND hWnd)
 	mii.fType = MFT_STRING;
 	mii.wID = IDM_ABOUT;
 	mii.dwTypeData = L"About (&A)";
+	if (::LoadString(hInstance, IDS_ABOUT, szBuf, 255) >= 1) mii.dwTypeData = szBuf;
 	mii.cch = (UINT) wcslen(mii.dwTypeData);
 	InsertMenuItem(hMenu, SC_CLOSE, FALSE, &mii);
 
@@ -348,6 +356,10 @@ void    get_directory_path(wchar_t *path)
 
 void	sysmenu_init_topmost(HWND hWnd, HMENU hMenu)
 {
+	HINSTANCE hInstance = ::GetModuleHandle(NULL);
+
+	TCHAR szBuf[256];
+
 	MENUITEMINFO mii;
 
 	memset(&mii, 0, sizeof(mii));
@@ -357,6 +369,7 @@ void	sysmenu_init_topmost(HWND hWnd, HMENU hMenu)
 	mii.fType = MFT_STRING;
 	mii.wID = IDM_TOPMOST;
 	mii.dwTypeData = L"TopMost (&T)";
+	if (::LoadString(hInstance, IDS_TOPMOST, szBuf, 255) >= 1) mii.dwTypeData = szBuf;
 	mii.cch = (UINT) wcslen(mii.dwTypeData);
 
 	InsertMenuItem(hMenu, SC_CLOSE, FALSE, &mii);
