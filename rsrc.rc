@@ -51,6 +51,8 @@ BEGIN
  IDS_NEW,       "New (&N)"
  IDS_TOPMOST,   "To Tray(&O)"
  IDS_TOTRAY,    "TopMost (&T)"
+ IDS_EDIT,      "Edit (&E)"
+ IDS_PASTE,     "Paste (&P)"
 END
 
 #pragma code_page(65001)
@@ -62,4 +64,6 @@ BEGIN
  IDS_NEW,       "新しいウィンドウ(&N)"
  IDS_TOPMOST,   "タスクトレイへ最小化(&O)"
  IDS_TOTRAY,    "最前面に表示(&T)"
+ IDS_EDIT,      "編集(&E)"
+ IDS_PASTE,     "貼り付け(&P)"
 END

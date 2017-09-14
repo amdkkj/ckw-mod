@@ -284,6 +284,7 @@ L" 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA."
 }
 
 /*----------*/
+void	sysmenu_init_edit(HWND hWnd, HMENU hMenu);
 void	sysmenu_init_topmost(HWND hWnd, HMENU hMenu);
 void	sysmenu_init_subconfig(HWND hWnd, HMENU hMenu);
 void	changeStateTopMostMenu(HWND hWnd, HMENU hMenu);
@@ -322,6 +323,8 @@ void	sysmenu_init(HWND hWnd)
 	mii.cch = (UINT) wcslen(mii.dwTypeData);
 	InsertMenuItem(hMenu, SC_CLOSE, FALSE, &mii);
 
+	sysmenu_init_edit(hWnd, hMenu);
+
 	sysmenu_init_topmost(hWnd, hMenu);
 
     // sysmenu_init_subconfig(hWnd, hMenu);
@@ -343,6 +346,36 @@ void	sysmenu_init(HWND hWnd)
 	mii.wID = 0;
 	mii.dwTypeData = 0;
 	mii.cch = 0;
+	InsertMenuItem(hMenu, SC_CLOSE, FALSE, &mii);
+}
+
+void	sysmenu_init_edit(HWND hWnd, HMENU hMenu)
+{
+	HINSTANCE hInstance = ::GetModuleHandle(NULL);
+
+	TCHAR szBuf[256];
+
+	MENUITEMINFO mii;
+	HMENU hSubMenu = CreatePopupMenu();
+
+	memset(&mii, 0, sizeof(mii));
+	mii.cbSize = sizeof(mii);
+	mii.fMask = MIIM_TYPE | MIIM_ID;
+
+	mii.fType = MFT_STRING;
+	mii.wID = IDM_PASTE;
+	mii.dwTypeData = L"Paste (&P)";
+	if (::LoadString(hInstance, IDS_PASTE, szBuf, 255) >= 1) mii.dwTypeData = szBuf;
+	mii.cch = (UINT) wcslen(mii.dwTypeData);
+	InsertMenuItem(hSubMenu, 0, TRUE, &mii);
+
+	mii.fMask |= MIIM_SUBMENU;
+	mii.fType = MFT_STRING;
+	mii.wID = IDM_EDIT;
+	mii.hSubMenu = hSubMenu;
+	mii.dwTypeData = L"Edit (&E)";
+	if (::LoadString(hInstance, IDS_EDIT, szBuf, 255) >= 1) mii.dwTypeData = szBuf;
+	mii.cch = (UINT) wcslen(mii.dwTypeData);
 	InsertMenuItem(hMenu, SC_CLOSE, FALSE, &mii);
 }
 
@@ -505,6 +538,9 @@ BOOL	onSysCommand(HWND hWnd, DWORD id)
 		}else{
 			trayToDesktop(hWnd);
 		}
+		return(TRUE);
+	case IDM_PASTE:
+		onPasteFromClipboard(hWnd);
 		return(TRUE);
 	}
     if(IDM_CONFIG_SELECT < id && id <= IDM_CONFIG_SELECT_MAX) {
